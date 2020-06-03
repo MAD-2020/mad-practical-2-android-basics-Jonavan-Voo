@@ -8,9 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
+    ArrayList<Button> buttonList = new ArrayList<>();
     private Button Button1;
     private Button Button2;
     private Button Button3;
@@ -24,9 +26,16 @@ public class MainActivity extends AppCompatActivity {
         Button1 = (Button) findViewById(R.id.Button1);
         Button2 = (Button) findViewById(R.id.Button2);
         Button3 = (Button) findViewById(R.id.Button3);
+        buttonList.add(Button1);
+        buttonList.add(Button2);
+        buttonList.add(Button3);
         Score = (TextView) findViewById(R.id.Score);
-
-        placeMole();
+        Log.v(TAG, "Finished Pre-Initialisation!");
+    }
+    @Override
+    protected void onStart(){
+        super.onStart();
+        setNewMole();
 
         Button1.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v)
@@ -37,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     deductScore();
                 }
-                placeMole();
+                setNewMole();
             }
         });
 
@@ -50,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     deductScore();
                 }
-                placeMole();
+                setNewMole();
             }
         });
 
@@ -63,9 +72,10 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     deductScore();
                 }
-                placeMole();
+                setNewMole();
             }
         });
+        Log.v(TAG, "Starting GUI!");
     }
     public void addScore() {
         int currentScore = Integer.parseInt(Score.getText().toString());
@@ -81,23 +91,12 @@ public class MainActivity extends AppCompatActivity {
         }
         Score.setText(Integer.toString(currentScore));
     }
-    public void placeMole() {
-        switch (new Random().nextInt(3)+1) {
-            case 1:
-                Button1.setText("*");
-                Button2.setText("O");
-                Button3.setText("O");
-                break;
-            case 2:
-                Button1.setText("O");
-                Button2.setText("*");
-                Button3.setText("O");
-                break;
-            case 3:
-                Button1.setText("O");
-                Button2.setText("O");
-                Button3.setText("*");
-                break;
+    private void setNewMole() {
+        Random ran = new Random();
+        int randomLocation = ran.nextInt(3);
+        for (int i = 0;i<buttonList.size();i++){
+            buttonList.get(i).setText("O");
         }
+        buttonList.get(randomLocation).setText("*");
     }
 }
